@@ -60,6 +60,7 @@ void loop()
 
 void get_gps_position()
 {
+  gps_cond = 0;
   if (gps_serial.available() > 0){
     if (gps.encode(gps_serial.read())){
       latitude = String(gps.location.lat(), 6);
@@ -75,7 +76,6 @@ void temperature_humidity_light()
   temperature = DHT11.temperature;
   humidity = DHT11.humidity;
   light = analogRead(light_pin);
-  print_serial();
 }
 
 void print_serial()
@@ -105,8 +105,8 @@ void post_data()
   client.post("/api/arduino/", contentType, data_to_send);
   int statusCode = client.responseStatusCode();
   String response = client.responseBody();
-  statusCode = client.responseStatusCode();
-  response = client.responseBody();
+  Serial.print(statusCode);
+  Serial.println(response);
 }
 
 void post_data_gps()
@@ -119,9 +119,8 @@ void post_data_gps()
   client.post("/api/arduino/", contentType, data_to_send);
   int statusCode = client.responseStatusCode();
   String response = client.responseBody();
-  client.post("/api/arduino/", contentType, location_send);
-  statusCode = client.responseStatusCode();
-  response = client.responseBody();
+  Serial.print(statusCode);
+  Serial.println(response);
 }
 
 void get_data()
